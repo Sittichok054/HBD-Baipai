@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Baipai ❤️</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Anuphan', sans-serif;
+            background: linear-gradient(135deg, #fff5f5 0%, #fed7e2 100%);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        .font-handwriting {
+            font-family: 'Caveat', cursive;
+        }
+        /* Floating Animation */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        /* Heart Fall */
+        .heart {
+            position: fixed;
+            top: -5vh;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear forwards;
+            z-index: 10;
+        }
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 8px 32px 0 rgba(255, 182, 193, 0.2);
+        }
+        /* Music Disc Animation */
+        .disc-spin {
+            animation: spin 3s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .fade-in {
+            animation: fadeIn 1s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-10 left-10 text-pink-200 floating" style="animation-delay: 0s;"><i data-lucide="heart" size="48"></i></div>
+        <div class="absolute top-1/4 right-20 text-pink-200 floating" style="animation-delay: 1s;"><i data-lucide="star" size="32"></i></div>
+        <div class="absolute bottom-10 left-1/4 text-pink-200 floating" style="animation-delay: 1.5s;"><i data-lucide="cloud" size="64"></i></div>
+    </div>
+
+    <!-- Music Control (Floating) -->
+    <div class="fixed top-5 right-5 z-50">
+        <button id="musicBtn" onclick="toggleMusic()" class="glass-card p-3 rounded-full text-pink-500 shadow-lg hover:scale-110 transition flex items-center justify-center">
+            <i data-lucide="music" id="musicIcon"></i>
+        </button>
+        <!-- Replace 'YOUR_MUSIC_URL' with a direct link to an mp3 file -->
+        <audio id="bgMusic" loop>
+            <source src="https://image2url.com/r2/default/audio/1773830823039-e53e3383-7ed8-4d12-9c42-6aab00d9b854.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- First Page: The Invitation -->
+    <div id="setup-section" class="min-h-screen flex flex-col items-center justify-center p-4 z-20 relative">
+        <div class="text-center space-y-8 max-w-md w-full">
+            <div class="relative inline-block">
+                <div class="absolute -inset-1 bg-gradient-to-r from-pink-400 to-red-400 rounded-full blur opacity-75 animate-pulse"></div>
+                <div class="relative bg-white p-6 rounded-full">
+                    <i data-lucide="gift" class="w-16 h-16 text-pink-500"></i>
+                </div>
+            </div>
+            <h1 class="text-4xl font-bold text-pink-600">ถึง.. ใบไผ่ ❤️</h1>
+            <div class="glass-card p-8 rounded-3xl">
+                <p class="text-gray-600 mb-6 text-lg">มีเซอร์ไพรส์รอคุณอยู่ ลองเปิดดูสิ</p>
+                <button onclick="startSurprise()" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-4 px-10 rounded-2xl shadow-lg transition duration-300 transform hover:-translate-y-1">
+                    เปิดกล่องของขวัญ 🎁
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Page: The Celebration -->
+    <div id="main-section" class="hidden min-h-screen flex flex-col items-center py-20 px-4 z-20 relative">
+        
+        <!-- Header Section -->
+        <div class="text-center space-y-4 mb-12 fade-in">
+            <h2 class="text-5xl font-bold text-pink-600 font-handwriting">Happy Birthday</h2>
+            <div class="relative inline-block">
+                <h1 class="text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-red-500 py-2">
+                    "ใบไผ่"
+                </h1>
+                <div class="absolute -top-4 -right-8 animate-bounce">🎂</div>
+            </div>
+        </div>
+
+        <!-- Countdown Section -->
+        <div class="glass-card p-8 rounded-3xl shadow-xl mb-12 fade-in" style="animation-delay: 0.3s">
+            <p class="text-pink-500 font-bold mb-4 uppercase tracking-widest text-sm text-center">Counting down to your special day</p>
+            <div id="timer" class="flex space-x-6 text-gray-700">
+                <div class="flex flex-col items-center"><span id="days" class="text-4xl font-bold">00</span><span class="text-xs font-semibold text-pink-400">DAYS</span></div>
+                <div class="text-4xl font-light text-pink-200">:</div>
+                <div class="flex flex-col items-center"><span id="hours" class="text-4xl font-bold">00</span><span class="text-xs font-semibold text-pink-400">HOURS</span></div>
+                <div class="text-4xl font-light text-pink-200">:</div>
+                <div class="flex flex-col items-center"><span id="minutes" class="text-4xl font-bold">00</span><span class="text-xs font-semibold text-pink-400">MINS</span></div>
+                <div class="text-4xl font-light text-pink-200">:</div>
+                <div class="flex flex-col items-center"><span id="seconds" class="text-4xl font-bold">00</span><span class="text-xs font-semibold text-pink-400">SECS</span></div>
+            </div>
+        </div>
+
+        <!-- Photo Memory Section -->
+        <div class="max-w-4xl w-full grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 fade-in" style="animation-delay: 0.6s">
+            <div class="group relative aspect-square bg-white p-2 rounded-xl shadow-lg transform -rotate-2 hover:rotate-0 transition duration-500">
+                <img src="https://media.discordapp.net/attachments/1190398736304717915/1483773322347937902/IMG_20260318_172431.jpg?ex=69bbcf17&is=69ba7d97&hm=504ba9bcf9b520cd2601d64a7736f58344511b9345342eb94bbc39520cde04a2&=&format=webp&width=654&height=856" class="w-full h-full object-cover rounded-lg">
+                <div class="absolute inset-0 bg-pink-500/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg text-white font-bold">You</div>
+            </div>
+            <div class="group relative aspect-square bg-white p-2 rounded-xl shadow-lg transform rotate-3 hover:rotate-0 transition duration-500">
+                <img src="https://media.discordapp.net/attachments/1190398736304717915/1483773323157573753/IMG_20260318_172504.jpg?ex=69bbcf17&is=69ba7d97&hm=7314e47cedb1aff1bbd757600e6e551e8f57a1246a58453498c906915a4acdf1&=&format=webp&width=863&height=856" class="w-full h-full object-cover rounded-lg">
+                <div class="absolute inset-0 bg-pink-500/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg text-white font-bold">Are</div>
+            </div>
+            <div class="group relative aspect-square bg-white p-2 rounded-xl shadow-lg transform -rotate-1 hover:rotate-0 transition duration-500">
+                <img src="https://media.discordapp.net/attachments/1190398736304717915/1483773322742468700/IMG_20260318_172448.jpg?ex=69bbcf17&is=69ba7d97&hm=37e9b147c407927bed196effb49528770434fb1c2e7528160bba88c48d637b3d&=&format=webp&width=861&height=856" class="w-full h-full object-cover rounded-lg">
+                <div class="absolute inset-0 bg-pink-500/20 opacity-0 group-hover:opacity-100 transition flex items-center justify-center rounded-lg text-white font-bold">My Everything</div>
+            </div>
+        </div>
+
+        <!-- Message Box with Random Quote -->
+        <div class="max-w-2xl w-full glass-card p-10 rounded-[2rem] shadow-2xl relative overflow-hidden fade-in" style="animation-delay: 0.9s">
+            <div class="absolute top-0 right-0 p-4 opacity-10">
+                <i data-lucide="quote" size="80"></i>
+            </div>
+            <div class="relative z-10 text-center">
+                <p id="wish-text" class="text-2xl text-gray-700 leading-relaxed font-handwriting mb-6">
+                    " ขอให้ใบไผ่มีรอยยิ้มที่สดใสแบบนี้ในทุกๆวันนะ เค้าไม่มีอะไรจะให้เลยแต่เค้าจะบอกว่าเค้าดีใจมากนะที่มีเธอในทุกๆวันของเค้า มันแฮปปี้และมีความสุขมากๆ ขอให้เธอมีความสุขมากๆในวันเกิดนะค้าบ รักที่สุดเลย❤️ "
+                </p>
+                <div class="h-[2px] w-20 bg-pink-300 mx-auto mb-6"></div>
+                <button onclick="changeMessage()" class="text-pink-400 hover:text-pink-600 text-sm flex items-center justify-center mx-auto gap-2">
+                    <i data-lucide="refresh-cw" size="14"></i> เปลี่ยนข้อความบอกรัก
+                </button>
+            </div>
+        </div>
+
+        <button onclick="rainHearts()" class="mt-12 bg-white/50 hover:bg-white p-4 rounded-full shadow-md transition-all group">
+            <i data-lucide="heart" class="text-pink-500 group-hover:scale-125 transition"></i>
+        </button>
+    </div>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Configuration
+        const targetDate = new Date("March 19, 2026 00:00:00").getTime();
+        const messages = [
+            "ขอให้ใบไผ่มีรอยยิ้มที่สดใสแบบนี้ในทุกๆ วันนะ รักที่สุดเลย ❤️",
+            "ขอบคุณที่เข้ามาเป็นเรื่องราวดีๆ ในชีวิตนะ สุขสันต์วันเกิดครับเธอ 🎂",
+            "ขอให้ปีนี้เป็นปีที่ใจดีกับใบไผ่นะ มีความสุขมากๆ นะครับ ✨",
+            "HBD นะครับคนดี ขอให้สมหวังในทุกสิ่งที่ตั้งใจนะ 🌈"
+        ];
+
+        // Music Control
+        const audio = document.getElementById('bgMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        let isPlaying = false;
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                musicIcon.innerHTML = lucide.icons.music.toSvg();
+                document.getElementById('musicBtn').classList.remove('disc-spin');
+            } else {
+                audio.play().catch(e => console.log("Autoplay blocked"));
+                musicIcon.innerHTML = lucide.icons.pause.toSvg();
+                document.getElementById('musicBtn').classList.add('disc-spin');
+            }
+            isPlaying = !isPlaying;
+            lucide.createIcons();
+        }
+
+        // Countdown Timer
+        function updateTimer() {
+            const now = new Date().getTime();
+            const diff = targetDate - now;
+
+            const d = Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
+            const h = Math.max(0, Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+            const m = Math.max(0, Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)));
+            const s = Math.max(0, Math.floor((diff % (1000 * 60)) / 1000));
+
+            document.getElementById("days").innerText = String(d).padStart(2, '0');
+            document.getElementById("hours").innerText = String(h).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(m).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(s).padStart(2, '0');
+        }
+        setInterval(updateTimer, 1000);
+
+        // Surprise Trigger
+        function startSurprise() {
+            document.getElementById('setup-section').classList.add('hidden');
+            const main = document.getElementById('main-section');
+            main.classList.remove('hidden');
+            
+            // Auto play music
+            toggleMusic();
+
+            // Fireworks
+            const duration = 5 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
+
+                const particleCount = 50 * (timeLeft / duration);
+                confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+                confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+            }, 250);
+
+            // Start continuous heart rain
+            setInterval(createHeart, 500);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            const types = ['❤️', '💖', '💗', '💓', '✨'];
+            heart.innerHTML = types[Math.floor(Math.random() * types.length)];
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.opacity = Math.random() * 0.5 + 0.5;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+
+        function rainHearts() {
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff69b4', '#ff1493', '#ffffff']
+            });
+            for(let i=0; i<15; i++) setTimeout(createHeart, i * 100);
+        }
+
+        function changeMessage() {
+            const text = document.getElementById('wish-text');
+            text.style.opacity = 0;
+            setTimeout(() => {
+                const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+                text.innerText = randomMsg;
+                text.style.opacity = 1;
+            }, 300);
+        }
+    </script>
+</body>
+</html>
